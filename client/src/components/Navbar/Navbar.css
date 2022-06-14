@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .nav-link {
+    @apply px-10 py-2 bg-gray-700 hover:bg-gray-600 hover:rounded-3xl duration-300 rounded mx-3;
+  }
+}
