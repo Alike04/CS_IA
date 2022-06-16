@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "./Navbar.css";
 import { FiSearch } from "react-icons/fi";
 import { FaCat } from "react-icons/fa";
+import { Menu } from "@headlessui/react";
 
 const Navbar = () => {
   return (
@@ -31,9 +32,37 @@ const Navbar = () => {
               <FiSearch className="text-xl" />
             </button>
           </div>
-          <div className=" bg-gray-600 rounded  w-12 h-12 hover:rounded-2xl hover:bg-gray-500 hover:scale-110 duration-300">
-            <FaCat className="relative top-[15%] left-[15%] w-8 h-8 p-1" />
-          </div>
+          <Menu as="div" className="text-left inline-block">
+            <Menu.Button className="bg-gray-600 rounded  w-12 h-12 active:rounded-2xl active:bg-gray-500  duration-300">
+              <FaCat className="relative top-[0%] left-[15%] w-8 h-8 p-1" />
+            </Menu.Button>
+            <Menu.Items className="absolute right-28 w-56 origin-top-right bg-gray-600">
+              <Menu.Item>
+                {({ active }) => (
+                  <a
+                    className={`${
+                      active && "bg-blue-500 rounded-lg  duration-300"
+                    } p-2 m-2`}
+                    href="/account-settings"
+                  >
+                    Account settings
+                  </a>
+                )}
+              </Menu.Item>{" "}
+              <Menu.Item>
+                {({ active }) => (
+                  <a
+                    className={`${
+                      active && "bg-blue-500 rounded-lg  duration-300"
+                    } p-2 m-2`}
+                    href="/account-settings"
+                  >
+                    Account settings
+                  </a>
+                )}
+              </Menu.Item>
+            </Menu.Items>
+          </Menu>
         </div>
       </div>
     </nav>
