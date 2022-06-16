@@ -6,4 +6,4 @@ const userSchema = new mongoose.Schema({
   boards: [{ type: mongoose.SchemaTypes.ObjectId, ref: "boards" }],
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model("users", userSchema);
