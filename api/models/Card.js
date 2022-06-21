@@ -8,6 +8,8 @@ const checklistSchema = new mongoose.Schema({
 const cardSchema = new mongoose.Schema({
   name: { type: String },
   deadline: { type: String },
+  boardId: { type: mongoose.SchemaTypes.ObjectId, ref: "boards" },
+  listId: { type: mongoose.SchemaTypes.ObjectId, ref: "lists" },
   checklists: [checklistSchema],
 });
 

@@ -5,6 +5,8 @@ const bcrypt = require("bcrypt");
 const User = require("../models/User");
 const jwt = require("jsonwebtoken");
 
+require("dotenv").config();
+
 const userRouter = express.Router();
 
 userRouter.post("/register", (req, res, next) => {
@@ -21,7 +23,11 @@ userRouter.post("/register", (req, res, next) => {
           .status(400)
           .json({ message: "User with this email already exists" });
       } else {
-        const newUser = new User(name, email, password);
+        const newUser = new User({
+          name: name,
+          email: email,
+          password: password,
+        });
         bcrypt.hash(password, 10).then((hash) => {
           newUser.password = hash;
           newUser
@@ -34,33 +40,38 @@ userRouter.post("/register", (req, res, next) => {
     .catch((error) => res.status(500).json(error));
 });
 
-userRouter.post("/login", (req, res, next) => {
+userRouter.post("/login", async (req, res, next) => {
   try {
     const { errors, isValid } = validateLoginInput(req.body);
     if (!isValid) {
       return res.status(400).json(errors);
     }
     const { email, password } = req.body;
-    const user = User.findOne({ email }).exec();
-    if (!user) {
-      return res.status(401).json({ message: "auth failed" });
-    }
-    const result = bcrypt.compare(password, user.password);
-    if (result) {
-      const token = jwt.sign(
-        {
-          email: user.email,
-          userId: user.id,
-        },
-        process.env.SECRET,
-        {
-          expiresIn: "10h",
+    User.findOne({ email })
+      .exec()
+      .then((user) => {
+        if (!user) {
+          return res.status(401).json({ message: "auth failed" });
         }
-      );
-      return res.status(200).json({ message: "Auth success", token });
-    }
-    res.status(401).json({ message: "Auth failed" });
+        bcrypt.compare(password, user.password).then((result) => {
+          if (result) {
+            const token = jwt.sign(
+              {
+                email: user.email,
+                id: user.id,
+              },
+              process.env.SECRET,
+              {
+                expiresIn: "10h",
+              }
+            );
+            return res.status(200).json({ message: "Auth success", token });
+          }
+          res.status(401).json({ message: "Auth failed" });
+        });
+      });
   } catch (e) {
+    res.status(500).json(e);
     throw new Error(e);
   }
 });
