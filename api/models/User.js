@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
 
-const userSchema = new mongoose.Schema({
-  name: { type: String },
-  email: { type: String },
-  password: { type: String },
-  boards: [{ type: mongoose.SchemaTypes.ObjectId, ref: "boards" }],
+const userSchema = mongoose.Schema({
+  email: { type: String, required: true },
+  password: { type: String, required: true, unique: true },
+  name: { type: String, required: true },
 });
 
-module.exports = mongoose.model("users", userSchema);
+userSchema.statics.isEmailTaken = async function (email) {
+  const user = await this.findOne({ email: email });
+  return user;
+};
+
+module.exports = mongoose.model("User", userSchema);

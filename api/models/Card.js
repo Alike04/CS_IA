@@ -1,16 +1,14 @@
-const mongoose = require("mongoose");
+const { default: mongoose } = require("mongoose");
 
-const checklistSchema = new mongoose.Schema({
-  name: { type: String },
-  isDone: { type: Boolean },
+const checkListSchema = mongoose.Schema({
+  name: { type: String, required: true },
+  isDone: { type: Boolean, required: true },
 });
 
-const cardSchema = new mongoose.Schema({
-  name: { type: String },
-  deadline: { type: String },
-  boardId: { type: mongoose.SchemaTypes.ObjectId, ref: "boards" },
-  listId: { type: mongoose.SchemaTypes.ObjectId, ref: "lists" },
-  checklists: [checklistSchema],
+const cardScheme = mongoose.Schema({
+  name: { type: String, required: true },
+  checkLists: checkListSchema,
+  listId: { type: String, required: true },
 });
 
-module.exports = mongoose.model("cards", cardSchema);
+module.exports = mongoose.model("Card", cardScheme);

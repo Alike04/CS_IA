@@ -1,8 +1,20 @@
 import React from "react";
 import { useEffect } from "react";
+import axios from "axios";
+import { useState } from "react";
 
 const Boards = () => {
-  useEffect(() => {});
+  const [boards, setBoards] = useState();
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_BASE_URL}board/`)
+      .then((res) => {
+        const data = res.data.boards;
+        setBoards(data);
+        console.log(boards);
+      })
+      .catch((e) => console.log(e));
+  }, []);
   return (
     <div className="px-40 pt-20 font-roboto font-light">
       <div>

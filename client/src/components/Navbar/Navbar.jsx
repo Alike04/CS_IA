@@ -8,7 +8,7 @@ import { Menu } from "@headlessui/react";
 const Navbar = () => {
   return (
     <nav className="bg-gray-800 h-20 text-gray-200 flex items-center font-roboto font-light">
-      <div className="container px-28 flex justify-between text-xl">
+      <div className="w-[100%] px-28 flex justify-between text-xl">
         <ul className="text-decoration decoration-0 flex justify-between ">
           <Link className="w-[100%]" to="/home">
             <li className="nav-link">Home</li>
