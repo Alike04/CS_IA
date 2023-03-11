@@ -5,14 +5,15 @@ const { getCardsByList, deleteCard } = require("./cardService");
 const ApiError = require("../utils/ApiError");
 
 const getListById = async (listId) => {
-  const list = List.findById(listId);
+  const list = await List.findById(listId);
   if (!list) {
     throw new ApiError(httpStatus.NOT_FOUND, "List is not found");
   }
   return list;
 };
 const getListsByBoard = async (boardId) => {
-  List.find({ boardId: boardId });
+  const lists = List.find({ boardId: boardId }).lean().exec();
+  return lists
 };
 const createList = async (listBody) => {
   return await List.create(listBody);

@@ -9,6 +9,7 @@ const cardScheme = mongoose.Schema({
   name: { type: String, required: true },
   checkLists: checkListSchema,
   listId: { type: String, required: true },
+  deadline: {type: Date}
 });
 
 module.exports = mongoose.model("Card", cardScheme);

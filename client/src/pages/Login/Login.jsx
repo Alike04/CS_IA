@@ -1,18 +1,27 @@
-import React from "react";
 import axios from "axios";
+import React from "react";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-const Login = () => {
+const Login = ({ funcNav }) => {
+  funcNav(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  function handSubmit() {
-    const body = { email: email, password: password };
+  const navigate = useNavigate();
+
+  const onSubmit = () => {
     axios
-      .post(`${process.env.REACT_APP_BASE_URL}auth/login`, body)
-      .then((res) => {
-        localStorage.setItem("token", res.data.token);
-      });
-  }
+      .post(`${process.env.REACT_APP_BASE_URL}auth/login`, {
+        email: email,
+        password: password,
+      })
+      .then((r) => {
+        localStorage.setItem("token", r.data.token);
+        navigate("/");
+      })
+      .catch((e) => console.log(e));
+  };
+
   return (
     <div className="h-screen bg-gray-200 pt-20 px-auto">
       <div className="bg-gray-50 w-[25%] h-[70%] mx-auto rounded">
@@ -63,17 +72,14 @@ const Login = () => {
             </div>
 
             <div className="mt-5 flex items-center">
-              <label className="md:w-2/3 block text-gray-500 font-bold">
-                <input className="mr-2 leading-tight" type="checkbox" />
-                <span className="text-sm">remember me</span>
-              </label>
+              <Link to="/register"> Not registered yet</Link>
             </div>
             <div className="flex items-center mt-5">
               <div className="mx-auto">
                 <button
                   className="shadow bg-gray-500 hover:bg-gray-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded"
                   type="button"
-                  onClick={handSubmit}
+                  onClick={onSubmit}
                 >
                   Log in
                 </button>

@@ -8,7 +8,7 @@ const generateToken = (user) => {
     },
     process.env.SECRET,
     {
-      expiresIn: "10h",
+      expiresIn: "48h",
     }
   );
   return token;

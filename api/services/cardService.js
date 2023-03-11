@@ -1,18 +1,10 @@
 const httpStatus = require("http-status");
 const { Card } = require("../models");
-const { getListById } = require("./listService");
+const { List } = require("../models");
 const ApiError = require("../utils/ApiError");
 
-const createCard = async (listId, cardBody) => {
-  const list = await getListById(listId);
-  if (!list) {
-    throw new ApiError(httpStatus.NOT_FOUND, "List is not found");
-  }
-  const cards = Array.from(list.cards);
+const createCard = async (cardBody) => {
   const newCard = await Card.create(cardBody);
-  cards.push(newCard);
-  list.set({ cards: cards });
-  list.save();
   return newCard;
 };
 const getCardById = async (cardId) => {
@@ -23,14 +15,18 @@ const getCardById = async (cardId) => {
   return card;
 };
 const getCardsByList = async (listId) => {
-  const list = await getListById(listId);
-  if (!list) {
+  const cards = await Card.find({ listId: listId });
+  if (!cards) {
     throw new ApiError(httpStatus.NOT_FOUND, "List is not found");
   }
-  return list.cards;
+  return cards;
 };
+const getAll = async () => {
+  const cards = await Card.find()
+  return cards;
+}
 const updateCard = async (cardId, updateBody) => {
-  const card = Card.findById(cardId);
+  const card = await Card.findById(cardId);
   if (!card) {
     throw new ApiError(httpStatus.NOT_FOUND, "Card is not found");
   }
@@ -52,4 +48,5 @@ module.exports = {
   createCard,
   updateCard,
   deleteCard,
+  getAll
 };

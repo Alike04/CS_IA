@@ -17,8 +17,8 @@ const auth = async (req, res, next) => {
     }
     req.userData = user;
     next();
-  } catch {
-    res.status(httpStatus.UNAUTHORIZED).send();
+  } catch (e) {
+    res.status(httpStatus.UNAUTHORIZED).send(e);
   }
 };
 

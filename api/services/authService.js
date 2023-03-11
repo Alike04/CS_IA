@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
 const { userService } = require("./index");
+const httpStatus = require("http-status");
 const bcrypt = require("bcrypt");
 const { getUserByEmail, getUserById } = require("./userService");
 const ApiError = require("../utils/ApiError");
-const httpStatus = require("http-status");
 const catchAsync = require("../utils/catchAsync");
+
 require("dotenv").config();
 
 const register = async (userBody) => {
@@ -23,19 +24,18 @@ const login = async (email, password) => {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Authorization fail");
   }
 };
-const authenticate = catchAsync(async (token) => {
+const authenticate = async (token) => {
   if (!token || token === null) {
     throw new ApiError(httpStatus, "Authenticate again");
   }
-  const result = jwt.verify(token, process.env.SECRET);
+  let result = jwt.verify(token, process.env.SECRET);
   const { userId } = result;
   const user = await getUserById(userId);
   if (!user) {
     throw new ApiError(httpStatus.UNAUTHORIZED, "Authentication is failed");
   }
-  console.log(user);
   return user;
-});
+};
 
 
 

@@ -15,7 +15,7 @@ const getListByBoard = catchAsync(async (req, res) => {
   res.status(httpStatus.OK).json({ lists: lists });
 });
 const updateList = catchAsync(async (req, res) => {
-  await listService.updateList(req.params.listId, req.body);
+  await listService.updateList(req.body._id, req.body);
   res
     .status(httpStatus.OK)
     .json({ message: "List has been updated successfully" });

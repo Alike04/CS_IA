@@ -8,22 +8,25 @@ const { getUserById } = require("./userService");
 const ApiError = require("../utils/ApiError");
 
 const createBoard = async (user, boardBody) => {
-  boardBody.members = [user];
+  boardBody.owner = user._id;
   return await Board.create(boardBody);
 };
+const getAllBoards = async () => {
+  boards = Board.find({});
+  return boards;
+}
 const getBoardsByUser = async (userId) => {
-  const user = await getUserById(userId);
-  return Board.find({ members: { _id: user._id } });
+  return Board.find({ member: userId });
 };
 const getBoardById = async (boardId) => {
-  const board = await Board.findById(boardId);
+  const board = await Board.findById(boardId).lean().exec();
   if (!board) {
     throw new ApiError(httpStatus.NOT_FOUND, "board is not found");
   }
   return board;
 };
 const updateBoard = async (boardId, boardBody) => {
-  const board = await getBoardById(boardId);
+  const board = await Board.findById(boardId);
   Object.assign(board, boardBody);
   await board.save();
   return board;
@@ -46,4 +49,5 @@ module.exports = {
   getBoardsByUser,
   updateBoard,
   deleteBoard,
+  getAllBoards
 };
